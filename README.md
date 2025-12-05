@@ -76,7 +76,7 @@ The system follows a clean, modular architecture with clear separation of concer
 
 - Python 3.8+
 - [Ollama](https://ollama.ai/) installed and running
-- Llama 3.2 model downloaded
+- gpt-oss model downloaded
 
 ### Installation Steps
 
@@ -95,7 +95,7 @@ curl -fsSL https://ollama.ai/install.sh | sh
 # Or download from https://ollama.ai/download
 ```
 
-3. **Pull the Llama 3.2 model**
+3. **Pull the gpt-oss model**
 
 ```bash
 ollama pull gpt-oss
@@ -309,9 +309,9 @@ pytest -v tests/test_planner.py -k "not skip"
 
 ## Design Decisions and Trade-offs
 
-### 1. LLM Choice: Llama 3.2 via Ollama
+### 1. LLM Choice: gpt-oss via Ollama
 
-**Decision**: Use Llama 3.2 (3B or 1B) through Ollama
+**Decision**: Use gpt-oss (13 gb) through Ollama
 
 **Rationale**:
 - Runs locally without API costs
