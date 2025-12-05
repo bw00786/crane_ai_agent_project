@@ -189,13 +189,13 @@ def main():
     print(f"Available tools: {list(tool_registry.list_tools().keys())}")
     print("Make sure Ollama is running: ollama serve")
     print("Make sure llama3.2 is pulled: ollama pull llama3.2")
-    print("\nStarting server on http://localhost:8200")
-    print("API docs available at http://localhost:8200/docs")
+    print("\nStarting server on http://localhost:8000")
+    print("API docs available at http://localhost:8000/docs")
     
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8200,
+        port=8000,
         log_level="info"
     )
 
