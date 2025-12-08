@@ -45,7 +45,7 @@ cd agent-runtime
 
  # on Windows
   python -m venv venv
-  .\vnev\scripts\activate 
+  .\venv\scripts\activate 
 
 
 pip install -r requirements.txt
