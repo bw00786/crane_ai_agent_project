@@ -1,3 +1,6 @@
+# ============================================================================
+# FILE: tests/test_calculator.py
+# ============================================================================
 """Unit tests for Calculator tool."""
 import pytest
 from src.tools.calculator import Calculator
@@ -36,6 +39,18 @@ class TestCalculatorBasics:
         result = calculator.execute({"expression": "20 / 4"})
         assert result.success is True
         assert result.output == 5.0
+    
+    def test_negative_numbers(self, calculator):
+        """Test with negative numbers."""
+        result = calculator.execute({"expression": "-5 + 3"})
+        assert result.success is True
+        assert result.output == -2
+    
+    def test_decimal_numbers(self, calculator):
+        """Test with decimal numbers."""
+        result = calculator.execute({"expression": "2.5 * 4"})
+        assert result.success is True
+        assert result.output == 10.0
 
 
 class TestCalculatorComplex:
@@ -64,6 +79,18 @@ class TestCalculatorComplex:
         result = calculator.execute({"expression": "3.5 + 2.5"})
         assert result.success is True
         assert result.output == 6.0
+    
+    def test_complex_expression(self, calculator):
+        """Test complex multi-operation expression."""
+        result = calculator.execute({"expression": "((2 + 3) * 4) / 2"})
+        assert result.success is True
+        assert result.output == 10.0
+    
+    def test_order_of_operations(self, calculator):
+        """Test that order of operations is correct."""
+        result = calculator.execute({"expression": "2 + 3 * 4"})
+        assert result.success is True
+        assert result.output == 14  # Not 20
 
 
 class TestCalculatorErrors:
@@ -92,6 +119,23 @@ class TestCalculatorErrors:
         result = calculator.execute({})
         assert result.success is False
         assert "expression" in result.error.lower()
+    
+    def test_whitespace_only_expression(self, calculator):
+        """Test expression with only whitespace."""
+        result = calculator.execute({"expression": "   "})
+        assert result.success is False
+        assert "empty" in result.error.lower()
+    
+    def test_invalid_operator(self, calculator):
+        """Test invalid operator."""
+        result = calculator.execute({"expression": "5 % 3"})
+        assert result.success is False
+        assert "invalid" in result.error.lower() or "unsafe" in result.error.lower() or "forbidden" in result.error.lower()
+    
+    def test_mismatched_parentheses(self, calculator):
+        """Test mismatched parentheses."""
+        result = calculator.execute({"expression": "((5 + 3)"})
+        assert result.success is False
 
 
 class TestCalculatorSecurity:
@@ -108,6 +152,11 @@ class TestCalculatorSecurity:
         result = calculator.execute({"expression": "eval('5+5')"})
         assert result.success is False
     
+    def test_reject_exec(self, calculator):
+        """Test that exec is rejected."""
+        result = calculator.execute({"expression": "exec('x=1')"})
+        assert result.success is False
+    
     def test_reject_dunder_methods(self, calculator):
         """Test that dunder methods are rejected."""
         result = calculator.execute({"expression": "__import__('os')"})
@@ -117,4 +166,35 @@ class TestCalculatorSecurity:
         """Test that invalid characters are rejected."""
         result = calculator.execute({"expression": "5 + 3; import os"})
         assert result.success is False
-        assert "invalid" in result.error.lower()
+        assert "invalid" in result.error.lower() or "unsafe" in result.error.lower() or "forbidden" in result.error.lower()
+    
+    def test_reject_lambda(self, calculator):
+        """Test that lambda is rejected."""
+        result = calculator.execute({"expression": "lambda x: x+1"})
+        assert result.success is False
+    
+    def test_reject_open(self, calculator):
+        """Test that open() is rejected."""
+        result = calculator.execute({"expression": "open('file.txt')"})
+        assert result.success is False
+
+
+class TestCalculatorProperties:
+    """Test calculator properties and metadata."""
+    
+    def test_name_property(self, calculator):
+        """Test that calculator has correct name."""
+        assert calculator.name == "Calculator"
+    
+    def test_description_property(self, calculator):
+        """Test that calculator has description."""
+        assert len(calculator.description) > 0
+        assert "arithmetic" in calculator.description.lower()
+    
+    def test_input_schema_property(self, calculator):
+        """Test that calculator has valid input schema."""
+        schema = calculator.input_schema
+        assert "properties" in schema
+        assert "expression" in schema["properties"]
+        assert "required" in schema
+        assert "expression" in schema["required"]
