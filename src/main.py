@@ -48,7 +48,7 @@ app = FastAPI(
 
 
 @app.get("/health")
-async def health_check() -> Dict[str, str]:
+async def health_check() -> Dict[str, Any]:  # <-- Use Any
     """
     Health check endpoint.
     
@@ -58,7 +58,7 @@ async def health_check() -> Dict[str, str]:
     return {
         "status": "healthy",
         "service": "agent-runtime",
-        "available_tools": list(tool_registry.list_tools().keys())
+        "available_tools": ", ".join(tool_registry.list_tools().keys())
     }
 
 

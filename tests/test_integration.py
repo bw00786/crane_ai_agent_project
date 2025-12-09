@@ -1,10 +1,6 @@
-
-# ============================================================================
-# FILE: tests/test_integration.py
-# ============================================================================
 """Integration tests for the complete system."""
 import pytest
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from src.main import app
 from src.models import RunStatus
 import asyncio
@@ -16,7 +12,7 @@ class TestAPIIntegration:
     
     async def test_health_check(self):
         """Test the health check endpoint."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             response = await client.get("/health")
             
             assert response.status_code == 200
@@ -27,7 +23,7 @@ class TestAPIIntegration:
     
     async def test_list_tools(self):
         """Test the tools listing endpoint."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             response = await client.get("/tools")
             
             assert response.status_code == 200
@@ -39,7 +35,7 @@ class TestAPIIntegration:
     
     async def test_create_run_returns_201(self):
         """Test that creating a run returns 201."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             response = await client.post(
                 "/runs",
                 json={"prompt": "Add a todo to buy milk"}
@@ -53,7 +49,7 @@ class TestAPIIntegration:
     
     async def test_get_nonexistent_run_returns_404(self):
         """Test that getting a nonexistent run returns 404."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             response = await client.get("/runs/nonexistent-id")
             
             assert response.status_code == 404
@@ -62,7 +58,7 @@ class TestAPIIntegration:
     
     async def test_create_run_with_empty_prompt_returns_400(self):
         """Test that empty prompt is handled."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             response = await client.post(
                 "/runs",
                 json={"prompt": ""}
@@ -73,7 +69,7 @@ class TestAPIIntegration:
     
     async def test_create_run_invalid_json_returns_422(self):
         """Test that invalid JSON returns 422."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             response = await client.post(
                 "/runs",
                 json={"wrong_field": "value"}
@@ -89,7 +85,7 @@ class TestEndToEndWorkflow:
     
     async def test_add_and_list_todo_workflow(self):
         """Test complete add and list todo workflow."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             # Create run
             create_response = await client.post(
                 "/runs",
@@ -127,7 +123,7 @@ class TestEndToEndWorkflow:
     
     async def test_calculator_workflow(self):
         """Test calculator workflow."""
-        async with AsyncClient(app=app, base_url="http://test") as client:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             # Create run
             create_response = await client.post(
                 "/runs",

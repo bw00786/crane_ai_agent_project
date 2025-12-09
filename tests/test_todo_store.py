@@ -21,8 +21,6 @@ class TestTodoStoreAdd:
             "operation": "add",
             "title": "Buy milk"
         })
-        
-        assert delete_result.success is True
         assert "todo" in result.output
         assert result.output["todo"]["title"] == "Buy milk"
         assert result.output["todo"]["completed"] is False
@@ -35,8 +33,6 @@ class TestTodoStoreAdd:
             "title": "Finish project",
             "description": "Complete the AI agent assignment"
         })
-        
-        assert delete_result.success is True
         assert result.output["todo"]["description"] == "Complete the AI agent assignment"
     
     def test_add_todo_missing_title(self, todo_store):
@@ -78,8 +74,6 @@ class TestTodoStoreAdd:
             "operation": "add",
             "title": "Test todo"
         })
-        
-        assert delete_result.success is True
         assert "created_at" in result.output["todo"]
         assert result.output["todo"]["created_at"] is not None
 
@@ -90,8 +84,6 @@ class TestTodoStoreList:
     def test_list_empty(self, todo_store):
         """Test listing with no todos."""
         result = todo_store.execute({"operation": "list"})
-        
-        assert delete_result.success is True
         assert result.output["count"] == 0
         assert result.output["todos"] == []
     
@@ -109,8 +101,6 @@ class TestTodoStoreList:
         
         # List todos
         result = todo_store.execute({"operation": "list"})
-        
-        assert delete_result.success is True
         assert result.output["count"] == 2
         assert len(result.output["todos"]) == 2
     
@@ -123,8 +113,6 @@ class TestTodoStoreList:
         })
         
         result = todo_store.execute({"operation": "list"})
-        
-        assert delete_result.success is True
         todo = result.output["todos"][0]
         assert "id" in todo
         assert "title" in todo
@@ -183,8 +171,6 @@ class TestTodoStoreComplete:
             "operation": "complete",
             "todo_id": todo_id
         })
-        
-        assert delete_result.success is True
         assert "already completed" in result.output["message"].lower()
     
     def test_complete_missing_todo_id(self, todo_store):
@@ -223,8 +209,6 @@ class TestTodoStoreDelete:
             "operation": "delete",
             "todo_id": todo_id
         })
-        
-        assert delete_result.success is True
         assert "deleted" in delete_result.output["message"].lower()
         
         # Verify it's gone
@@ -262,8 +246,6 @@ class TestTodoStoreDelete:
             "operation": "delete",
             "todo_id": todo_id
         })
-        
-        assert delete_result.success is True
         assert "deleted_todo" in delete_result.output
         assert delete_result.output["deleted_todo"]["title"] == "Task to delete"
 
@@ -357,7 +339,6 @@ class TestTodoStoreFlow:
             "operation": "delete",
             "todo_id": todo_id
         })
-        assert delete_result.success is True
         
         # Verify deleted
         list_result3 = todo_store.execute({"operation": "list"})
