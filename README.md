@@ -260,8 +260,8 @@ Response (completed):
       "attempt": 1
     }
   ],
-  "created_at": "2024-01-15T10:00:00",
-  "completed_at": "2024-01-15T10:00:05"
+  "created_at": "2025-12-07T10:00:00",
+  "completed_at": "2025-12-07T10:00:05"
 }
 ```
 

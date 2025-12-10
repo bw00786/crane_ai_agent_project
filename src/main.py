@@ -1,4 +1,4 @@
-"""FastAPI application entry point."""
+"""FastAPI application entry point for the ToDoList Microservice ."""
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 import uvicorn
@@ -188,7 +188,7 @@ def main():
     print("Starting AI Agent Runtime...")
     print(f"Available tools: {list(tool_registry.list_tools().keys())}")
     print("Make sure Ollama is running: ollama serve")
-    print("Make sure llama3.2 is pulled: ollama pull llama3.2")
+    print("Make sure gpt-oss is pulled: ollama pull gpt-oss")
     print("\nStarting server on http://localhost:8000")
     print("API docs available at http://localhost:8000/docs")
     

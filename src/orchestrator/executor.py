@@ -216,9 +216,11 @@ class Orchestrator:
             Updated run with new execution results
         """
         if not self.can_retry_run(run):
+            print("Run cannot be resumed")
             raise ValueError("Run cannot be resumed")
         
         if not run.plan:
+            print("Run has no plan to resume")
             raise ValueError("Run has no plan to resume")
         
         # Find the last completed step
@@ -251,6 +253,7 @@ class Orchestrator:
             
         except Exception as e:
             run.status = RunStatus.FAILED
+            print(f"Resume execution error: {str(e)}")
             run.error = f"Resume execution error: {str(e)}"
             run.completed_at = datetime.utcnow()
         

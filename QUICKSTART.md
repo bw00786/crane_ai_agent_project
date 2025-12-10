@@ -150,7 +150,7 @@ curl -X POST http://localhost:8000/runs \
 ## Quick Architecture Overview
 
 ```
-User Prompt → Planner (Llama 3.2) → Structured Plan → Orchestrator → Tools → Results
+User Prompt → Planner (gpt-oss) → Structured Plan → Orchestrator → Tools → Results
                                                            ↓
                                                        Run Store
 ```
