@@ -131,7 +131,7 @@ User: "Calculate 15 * 8 and add the result as a todo"
       "tool": "Calculator",
       "input": {{"expression": "15 * 8"}},
       "reasoning": "Calculate the multiplication result"
-    }},
+    }},how does the 
     {{
       "step_number": 2,
       "tool": "TodoStore",
